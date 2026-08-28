@@ -2,7 +2,7 @@
   "name": "Qashqai Log",
   "short_name": "Qashqai",
   "description": "Fuel, maintenance and cost tracker for the 2009 Nissan Qashqai",
-  "start_url": "/",
+  "start_url": "/carlog/",
   "display": "standalone",
   "background_color": "#111418",
   "theme_color": "#111418",
