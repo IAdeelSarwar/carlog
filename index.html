@@ -6,379 +6,379 @@
   <meta name="theme-color" content="#111418" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Qashqai Log</title>
+  <title>Car Log</title>
   <link rel="manifest" href="manifest.json" />
   <style>
     :root {
-      --bg:        #111418;
-      --surface:   #1a1f26;
-      --surface2:  #222831;
-      --border:    #2c333d;
-      --accent:    #e8a020;
-      --accent-dim:#3d2c08;
-      --green:     #3ecf8e;
-      --green-dim: #0d2d1f;
-      --red:       #e85d5d;
-      --red-dim:   #2d1010;
-      --amber:     #f59e0b;
-      --amber-dim: #2d1f04;
-      --blue:      #60a5fa;
-      --blue-dim:  #0d1e3a;
-      --text:      #eaf0f8;
-      --muted:     #6b7888;
-      --label:     #9aa5b4;
-      --radius:    10px;
-      --radius-sm: 6px;
+      --bg:#111418; --surface:#1a1f26; --surface2:#222831; --border:#2c333d;
+      --accent:#e8a020; --accent-dim:#3d2c08;
+      --green:#3ecf8e; --green-dim:#0d2d1f;
+      --red:#e85d5d; --red-dim:#2d1010;
+      --amber:#f59e0b; --amber-dim:#2d1f04;
+      --blue:#60a5fa; --blue-dim:#0d1e3a;
+      --text:#eaf0f8; --muted:#6b7888; --label:#9aa5b4;
+      --radius:10px; --radius-sm:6px;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-      padding-bottom: 80px;
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;padding-bottom:80px}
 
-    /* HEADER */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 16px 12px;
-    }
-    .header-top { display: flex; align-items: center; justify-content: space-between; }
-    .car-name { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-    .car-sub  { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 1px; }
-    .mileage-pill {
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 20px; padding: 5px 12px;
-      font-size: 13px; font-weight: 600; color: var(--label);
-      cursor: pointer; transition: border-color .15s;
-    }
-    .mileage-pill span { color: var(--text); }
-    .mileage-pill:hover { border-color: var(--accent); }
+    /* ── AUTH SCREEN ── */
+    #authScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:32px 24px;text-align:center}
+    .auth-logo{font-size:48px;margin-bottom:16px}
+    .auth-title{font-size:26px;font-weight:800;color:var(--text);margin-bottom:8px}
+    .auth-sub{font-size:14px;color:var(--muted);margin-bottom:40px;line-height:1.5}
+    .btn-google{display:flex;align-items:center;gap:12px;background:#fff;color:#1f1f1f;border:none;border-radius:10px;padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .15s;width:100%;max-width:280px;justify-content:center}
+    .btn-google:hover{opacity:.9}
+    .btn-google svg{width:20px;height:20px;flex-shrink:0}
+    .auth-note{font-size:12px;color:var(--muted);margin-top:24px;line-height:1.6}
 
-    /* NAV */
-    nav {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-      background: var(--surface); border-top: 1px solid var(--border);
-      display: flex;
-    }
-    nav button {
-      flex: 1; background: none; border: none; color: var(--muted);
-      font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
-      padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
-      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px;
-      transition: color .15s;
-    }
-    nav button.active { color: var(--accent); }
-    nav button svg { width: 20px; height: 20px; }
+    /* ── LOADING ── */
+    #loadingScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;gap:16px}
+    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{font-size:14px;color:var(--muted)}
 
-    /* VIEWS */
-    .view { display: none; padding: 16px; }
-    .view.active { display: block; }
+    /* ── GARAGE SCREEN (car picker shown before app) ── */
+    #garageScreen{display:none;padding:24px 16px;padding-bottom:32px}
+    .garage-header{margin-bottom:24px}
+    .garage-title{font-size:22px;font-weight:800}
+    .garage-sub{font-size:13px;color:var(--muted);margin-top:4px}
+    .user-row{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+    .user-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .user-avatar-placeholder{width:36px;height:36px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .user-name{font-size:14px;font-weight:600}
+    .user-email{font-size:12px;color:var(--muted);margin-top:1px}
+    .btn-signout{margin-left:auto;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:12px;color:var(--muted);cursor:pointer}
+    .car-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+    .car-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .15s}
+    .car-card:hover,.car-card:active{border-color:var(--accent)}
+    .car-card-icon{font-size:28px;flex-shrink:0}
+    .car-card-name{font-size:16px;font-weight:700}
+    .car-card-sub{font-size:12px;color:var(--muted);margin-top:3px}
+    .car-card-arrow{margin-left:auto;color:var(--muted);font-size:18px}
+    .btn-add-car{width:100%;background:none;border:2px dashed var(--border);border-radius:var(--radius);padding:16px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s}
+    .btn-add-car:hover{border-color:var(--accent);color:var(--accent)}
 
-    /* INSIGHT CARDS */
-    .insight-card {
-      border-radius: var(--radius); padding: 14px 16px;
-      margin-bottom: 10px; border: 1px solid;
-      display: flex; align-items: flex-start; gap: 12px;
-    }
-    .insight-card.green  { background: var(--green-dim);  border-color: #1a5c3a; }
-    .insight-card.amber  { background: var(--amber-dim);  border-color: #6b420a; }
-    .insight-card.red    { background: var(--red-dim);    border-color: #6b1a1a; }
-    .insight-card.blue   { background: var(--blue-dim);   border-color: #1a3a6b; }
-    .insight-card.neutral{ background: var(--surface);    border-color: var(--border); }
-    .insight-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-    .insight-body {}
-    .insight-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .insight-text  { font-size: 12px; color: var(--label); line-height: 1.5; }
-    .insight-text strong { color: var(--text); }
+    /* ── HEADER ── */
+    header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 16px}
+    .header-top{display:flex;align-items:center;gap:10px}
+    .header-back{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;font-size:18px;line-height:1;flex-shrink:0}
+    .car-switcher{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:border-color .15s;min-width:0}
+    .car-switcher:hover{border-color:var(--accent)}
+    .car-switcher-icon{font-size:14px;flex-shrink:0}
+    .car-switcher-text{flex:1;min-width:0}
+    .car-switcher-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .car-switcher-sub{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .car-switcher-chevron{color:var(--muted);font-size:12px;flex-shrink:0}
+    .mileage-pill{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--label);cursor:pointer;transition:border-color .15s;white-space:nowrap;flex-shrink:0}
+    .mileage-pill span{color:var(--text)}
+    .mileage-pill:hover{border-color:var(--accent)}
 
-    /* SERVICE REMINDER BANNER */
-    .service-banner {
-      border-radius: var(--radius); padding: 14px 16px;
-      margin-bottom: 10px; border: 1px solid;
-    }
-    .service-banner.ok     { background: var(--green-dim);  border-color: #1a5c3a; }
-    .service-banner.soon   { background: var(--amber-dim);  border-color: #6b420a; }
-    .service-banner.overdue{ background: var(--red-dim);    border-color: #6b1a1a; }
-    .banner-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .banner-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-    .banner-label.ok      { color: var(--green); }
-    .banner-label.soon    { color: var(--amber); }
-    .banner-label.overdue { color: var(--red); }
-    .banner-edit { font-size: 11px; color: var(--muted); text-decoration: underline; cursor: pointer; }
-    .banner-progress-track {
-      height: 6px; background: var(--surface2); border-radius: 3px; margin-bottom: 10px; overflow: hidden;
-    }
-    .banner-progress-fill { height: 100%; border-radius: 3px; transition: width .5s; }
-    .banner-fill-ok     { background: var(--green); }
-    .banner-fill-soon   { background: var(--amber); }
-    .banner-fill-overdue{ background: var(--red); }
-    .banner-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-    .banner-stat { text-align: center; }
-    .banner-stat-val { font-size: 15px; font-weight: 800; color: var(--text); }
-    .banner-stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-top: 1px; }
+    /* ── CAR DROPDOWN ── */
+    .car-dropdown{position:fixed;top:0;left:0;right:0;bottom:0;z-index:150;display:none}
+    .car-dropdown.open{display:block}
+    .car-dropdown-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+    .car-dropdown-panel{position:absolute;top:60px;left:12px;right:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .car-dropdown-item{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
+    .car-dropdown-item:last-child{border-bottom:none}
+    .car-dropdown-item:hover{background:var(--surface2)}
+    .car-dropdown-item.active{background:var(--accent-dim)}
+    .car-dropdown-item.active .cdi-name{color:var(--accent)}
+    .cdi-icon{font-size:20px;flex-shrink:0}
+    .cdi-name{font-size:14px;font-weight:700;color:var(--text)}
+    .cdi-sub{font-size:12px;color:var(--muted);margin-top:1px}
+    .cdi-check{margin-left:auto;color:var(--accent);font-size:16px}
+    .car-dropdown-add{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;color:var(--accent);font-size:14px;font-weight:600;border-top:1px solid var(--border)}
+    .car-dropdown-add:hover{background:var(--surface2)}
 
-    /* STAT CARDS */
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
-    .stat-card.wide { grid-column: 1 / -1; }
-    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-    .stat-value { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; }
-    .stat-value.accent { color: var(--accent); }
-    .stat-value.green  { color: var(--green); }
-    .stat-value.red    { color: var(--red); }
-    .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .trend-arrow { font-size: 13px; margin-left: 4px; }
+    /* ── NAV ── */
+    nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface);border-top:1px solid var(--border);display:flex}
+    nav button{flex:1;background:none;border:none;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:10px 0 calc(10px + env(safe-area-inset-bottom));cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .15s}
+    nav button.active{color:var(--accent)}
+    nav button svg{width:20px;height:20px}
 
-    /* SECTION HDR */
-    .section-hdr { display: flex; align-items: center; justify-content: space-between; margin: 18px 0 10px; }
-    .section-title { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--label); }
-    .btn-add {
-      background: var(--accent); color: #000; border: none;
-      border-radius: var(--radius-sm); padding: 6px 12px;
-      font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity .15s;
-    }
-    .btn-add:hover { opacity: .85; }
+    /* ── VIEWS ── */
+    .view{display:none;padding:16px}
+    .view.active{display:block}
 
-    /* LOG LIST */
-    .log-list { display: flex; flex-direction: column; gap: 8px; }
-    .log-item {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 12px 14px;
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    }
-    .log-item:active { opacity: .75; }
-    .log-left { display: flex; align-items: center; gap: 10px; }
-    .log-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 16px;
-    }
-    .log-icon.fuel  { background: var(--accent-dim); }
-    .log-icon.maint { background: var(--green-dim); }
-    .log-title { font-size: 14px; font-weight: 600; color: var(--text); }
-    .log-meta  { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .log-right { text-align: right; flex-shrink: 0; }
-    .log-cost  { font-size: 15px; font-weight: 700; color: var(--text); }
-    .log-mpg   { font-size: 12px; color: var(--green); margin-top: 2px; }
-    .log-mpg.red { color: var(--red); }
-    .log-del   {
-      background: none; border: none; color: var(--muted);
-      cursor: pointer; padding: 4px; border-radius: 4px; font-size: 14px; line-height: 1;
-    }
-    .log-del:hover { color: var(--red); }
-    .empty-msg { text-align: center; color: var(--muted); font-size: 14px; padding: 32px 0; }
+    /* ── INSIGHT CARDS ── */
+    .insight-card{border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;border:1px solid;display:flex;align-items:flex-start;gap:12px}
+    .insight-card.green{background:var(--green-dim);border-color:#1a5c3a}
+    .insight-card.amber{background:var(--amber-dim);border-color:#6b420a}
+    .insight-card.red{background:var(--red-dim);border-color:#6b1a1a}
+    .insight-card.blue{background:var(--blue-dim);border-color:#1a3a6b}
+    .insight-card.neutral{background:var(--surface);border-color:var(--border)}
+    .insight-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+    .insight-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+    .insight-text{font-size:12px;color:var(--label);line-height:1.5}
+    .insight-text strong{color:var(--text)}
 
-    /* MODAL */
-    .modal-backdrop {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.7); z-index: 200; align-items: flex-end;
-    }
-    .modal-backdrop.open { display: flex; }
-    .modal {
-      background: var(--surface); border-top: 1px solid var(--border);
-      border-radius: 16px 16px 0 0;
-      padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
-      width: 100%; max-height: 92dvh; overflow-y: auto;
-    }
-    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 18px; }
-    .field { margin-bottom: 14px; }
-    .field label {
-      display: block; font-size: 12px; font-weight: 600;
-      letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
-    }
-    .field input, .field select, .field textarea {
-      width: 100%; background: var(--surface2); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 10px 12px;
-      font-size: 15px; color: var(--text); font-family: inherit; outline: none;
-      transition: border-color .15s; -webkit-appearance: none;
-    }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
-    .field textarea { resize: vertical; min-height: 70px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
-    .btn-primary {
-      flex: 1; background: var(--accent); color: #000; border: none;
-      border-radius: var(--radius-sm); padding: 13px;
-      font-size: 15px; font-weight: 700; cursor: pointer;
-    }
-    .btn-cancel {
-      background: var(--surface2); color: var(--label); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 13px 18px;
-      font-size: 15px; font-weight: 600; cursor: pointer;
-    }
-    .calc-hint {
-      font-size: 12px; color: var(--blue); min-height: 16px; margin-bottom: 4px;
-    }
-    .fuel-preview {
-      background: var(--surface2); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); padding: 10px 12px;
-      margin-bottom: 14px; display: flex; gap: 16px; flex-wrap: wrap;
-    }
-    .fp-item { display: flex; flex-direction: column; }
-    .fp-val { font-size: 16px; font-weight: 800; color: var(--text); }
-    .fp-val.green { color: var(--green); }
-    .fp-val.red   { color: var(--red); }
-    .fp-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: 2px; }
+    /* ── SERVICE BANNER ── */
+    .service-banner{border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;border:1px solid}
+    .service-banner.ok{background:var(--green-dim);border-color:#1a5c3a}
+    .service-banner.soon{background:var(--amber-dim);border-color:#6b420a}
+    .service-banner.overdue{background:var(--red-dim);border-color:#6b1a1a}
+    .banner-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .banner-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .banner-label.ok{color:var(--green)}.banner-label.soon{color:var(--amber)}.banner-label.overdue{color:var(--red)}
+    .banner-edit{font-size:11px;color:var(--muted);text-decoration:underline;cursor:pointer}
+    .banner-progress-track{height:6px;background:var(--surface2);border-radius:3px;margin-bottom:10px;overflow:hidden}
+    .banner-progress-fill{height:100%;border-radius:3px;transition:width .5s}
+    .banner-fill-ok{background:var(--green)}.banner-fill-soon{background:var(--amber)}.banner-fill-overdue{background:var(--red)}
+    .banner-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+    .banner-stat{text-align:center}
+    .banner-stat-val{font-size:15px;font-weight:800;color:var(--text)}
+    .banner-stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
 
-    /* PERIOD TOGGLE */
-    .period-toggle {
-      display: flex; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 3px; gap: 3px; margin-bottom: 14px;
-    }
-    .period-btn {
-      flex: 1; background: none; border: none; color: var(--muted);
-      font-size: 13px; font-weight: 600; padding: 8px 4px; border-radius: 7px;
-      cursor: pointer; transition: all .15s;
-    }
-    .period-btn.active { background: var(--accent-dim); color: var(--accent); }
+    /* ── STAT CARDS ── */
+    .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+    .stat-card.wide{grid-column:1/-1}
+    .stat-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .stat-value{font-size:26px;font-weight:800;color:var(--text);line-height:1}
+    .stat-value.accent{color:var(--accent)}.stat-value.green{color:var(--green)}.stat-value.red{color:var(--red)}
+    .stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+    .trend-arrow{font-size:13px;margin-left:4px}
 
-    /* BREAKDOWN */
-    .breakdown { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; }
-    .breakdown-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 14px;
-    }
-    .breakdown-row:last-child { border-bottom: none; }
-    .breakdown-row .lbl { color: var(--label); }
-    .breakdown-row .val { font-weight: 700; }
-    .breakdown-row.total .lbl { color: var(--text); font-weight: 700; }
-    .breakdown-row.total .val { color: var(--accent); font-size: 16px; }
+    /* ── SECTION HDR ── */
+    .section-hdr{display:flex;align-items:center;justify-content:space-between;margin:18px 0 10px}
+    .section-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--label)}
+    .btn-add{background:var(--accent);color:#000;border:none;border-radius:var(--radius-sm);padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s}
+    .btn-add:hover{opacity:.85}
 
-    /* MPG CHART */
-    .mpg-chart { margin-top: 4px; }
-    .mpg-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-    .mpg-bar-label { font-size: 11px; color: var(--muted); width: 60px; flex-shrink: 0; }
-    .mpg-bar-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
-    .mpg-bar-fill  { height: 100%; border-radius: 4px; transition: width .4s; }
-    .mpg-bar-fill.good { background: var(--green); }
-    .mpg-bar-fill.avg  { background: var(--amber); }
-    .mpg-bar-fill.poor { background: var(--red); }
-    .mpg-bar-val { font-size: 12px; font-weight: 700; width: 44px; text-align: right; }
-    .mpg-bar-val.good { color: var(--green); }
-    .mpg-bar-val.avg  { color: var(--amber); }
-    .mpg-bar-val.poor { color: var(--red); }
+    /* ── LOG LIST ── */
+    .log-list{display:flex;flex-direction:column;gap:8px}
+    .log-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .log-item:active{opacity:.75}
+    .log-left{display:flex;align-items:center;gap:10px}
+    .log-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+    .log-icon.fuel{background:var(--accent-dim)}.log-icon.maint{background:var(--green-dim)}
+    .log-title{font-size:14px;font-weight:600;color:var(--text)}
+    .log-meta{font-size:12px;color:var(--muted);margin-top:2px}
+    .log-right{text-align:right;flex-shrink:0}
+    .log-cost{font-size:15px;font-weight:700;color:var(--text)}
+    .log-mpg{font-size:12px;color:var(--green);margin-top:2px}
+    .log-mpg.red{color:var(--red)}
+    .log-del{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:4px;font-size:14px;line-height:1}
+    .log-del:hover{color:var(--red)}
+    .empty-msg{text-align:center;color:var(--muted);font-size:14px;padding:32px 0}
 
-    /* NEXT SERVICE SETTINGS */
-    .settings-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 14px; border-bottom: 1px solid var(--border);
-    }
-    .settings-row:last-child { border-bottom: none; }
-    .settings-lbl { font-size: 14px; color: var(--label); }
-    .settings-val { font-size: 14px; font-weight: 700; color: var(--text); }
+    /* ── MODAL ── */
+    .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:flex-end}
+    .modal-backdrop.open{display:flex}
+    .modal{background:var(--surface);border-top:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));width:100%;max-height:92dvh;overflow-y:auto}
+    .modal-title{font-size:17px;font-weight:700;margin-bottom:18px}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:15px;color:var(--text);font-family:inherit;outline:none;transition:border-color .15s;-webkit-appearance:none}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+    .field textarea{resize:vertical;min-height:70px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .modal-actions{display:flex;gap:10px;margin-top:6px}
+    .btn-primary{flex:1;background:var(--accent);color:#000;border:none;border-radius:var(--radius-sm);padding:13px;font-size:15px;font-weight:700;cursor:pointer}
+    .btn-cancel{background:var(--surface2);color:var(--label);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 18px;font-size:15px;font-weight:600;cursor:pointer}
+    .btn-danger{background:var(--red-dim);color:var(--red);border:1px solid #6b1a1a;border-radius:var(--radius-sm);padding:13px 18px;font-size:15px;font-weight:600;cursor:pointer}
+    .calc-hint{font-size:12px;color:var(--blue);min-height:16px;margin-bottom:4px}
+    .fuel-preview{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;display:flex;gap:16px;flex-wrap:wrap}
+    .fp-item{display:flex;flex-direction:column}
+    .fp-val{font-size:16px;font-weight:800;color:var(--text)}
+    .fp-val.green{color:var(--green)}.fp-val.red{color:var(--red)}
+    .fp-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:2px}
+
+    /* ── PERIOD TOGGLE ── */
+    .period-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:3px;gap:3px;margin-bottom:14px}
+    .period-btn{flex:1;background:none;border:none;color:var(--muted);font-size:13px;font-weight:600;padding:8px 4px;border-radius:7px;cursor:pointer;transition:all .15s}
+    .period-btn.active{background:var(--accent-dim);color:var(--accent)}
+
+    /* ── BREAKDOWN ── */
+    .breakdown{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+    .breakdown-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px}
+    .breakdown-row:last-child{border-bottom:none}
+    .breakdown-row .lbl{color:var(--label)}.breakdown-row .val{font-weight:700}
+    .breakdown-row.total .lbl{color:var(--text);font-weight:700}.breakdown-row.total .val{color:var(--accent);font-size:16px}
+
+    /* ── MPG CHART ── */
+    .mpg-chart{margin-top:4px}
+    .mpg-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+    .mpg-bar-label{font-size:11px;color:var(--muted);width:60px;flex-shrink:0}
+    .mpg-bar-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+    .mpg-bar-fill{height:100%;border-radius:4px;transition:width .4s}
+    .mpg-bar-fill.good{background:var(--green)}.mpg-bar-fill.avg{background:var(--amber)}.mpg-bar-fill.poor{background:var(--red)}
+    .mpg-bar-val{font-size:12px;font-weight:700;width:44px;text-align:right}
+    .mpg-bar-val.good{color:var(--green)}.mpg-bar-val.avg{color:var(--amber)}.mpg-bar-val.poor{color:var(--red)}
+
+    /* ── SAVING INDICATOR ── */
+    .save-toast{position:fixed;top:70px;right:12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--muted);z-index:300;opacity:0;transition:opacity .2s;pointer-events:none}
+    .save-toast.visible{opacity:1}
   </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div>
-      <div class="car-name">Qashqai Log</div>
-      <div class="car-sub">2009 Nissan Qashqai 1.6</div>
-    </div>
-    <button class="mileage-pill" id="mileagePill" onclick="openMileageModal()">
-      <span id="currentMileage">—</span> mi
-    </button>
+<!-- ══ LOADING ══ -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <div class="loading-text">Loading…</div>
+</div>
+
+<!-- ══ AUTH ══ -->
+<div id="authScreen" style="display:none">
+  <div class="auth-logo">🚗</div>
+  <div class="auth-title">Car Log</div>
+  <div class="auth-sub">Track fuel, service, and costs<br>across all your cars. Synced to the cloud.</div>
+  <button class="btn-google" onclick="signInWithGoogle()">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+    Sign in with Google
+  </button>
+  <div class="auth-note">Your data is stored securely in the cloud<br>and syncs across all your devices.</div>
+</div>
+
+<!-- ══ GARAGE ══ -->
+<div id="garageScreen">
+  <div class="garage-header">
+    <div class="garage-title">My Garage</div>
+    <div class="garage-sub">Select a car to view its log</div>
   </div>
-</header>
+  <div class="user-row" id="userRow"></div>
+  <div class="car-grid" id="carGrid"></div>
+  <button class="btn-add-car" onclick="openAddCarModal()">+ Add a car</button>
+</div>
 
-<main>
-  <!-- FUEL VIEW -->
-  <section class="view active" id="view-fuel">
-    <div class="section-hdr" style="margin-top:6px">
-      <span class="section-title">Fuel Log</span>
-      <button class="btn-add" onclick="openFuelModal()">+ Add Fill-up</button>
+<!-- ══ MAIN APP ══ -->
+<div id="appScreen" style="display:none">
+
+  <div class="save-toast" id="saveToast">Saving…</div>
+
+  <header>
+    <div class="header-top">
+      <button class="header-back" onclick="goToGarage()" title="Back to garage">◀</button>
+      <button class="car-switcher" onclick="toggleCarDropdown()">
+        <span class="car-switcher-icon" id="csIcon">🚗</span>
+        <span class="car-switcher-text">
+          <span class="car-switcher-name" id="csName">My Car</span>
+          <span class="car-switcher-sub" id="csSub">Tap to switch</span>
+        </span>
+        <span class="car-switcher-chevron">▾</span>
+      </button>
+      <button class="mileage-pill" id="mileagePill" onclick="openMileageModal()">
+        <span id="currentMileage">—</span> mi
+      </button>
     </div>
-    <div class="log-list" id="fuelList"></div>
-  </section>
+  </header>
 
-  <!-- MAINTENANCE VIEW -->
-  <section class="view" id="view-maint">
-    <div id="serviceBanner" style="margin-top:6px"></div>
-    <div class="section-hdr">
-      <span class="section-title">Service Records</span>
-      <button class="btn-add" onclick="openMaintModal()">+ Add Record</button>
+  <!-- Car dropdown -->
+  <div class="car-dropdown" id="carDropdown">
+    <div class="car-dropdown-backdrop" onclick="closeCarDropdown()"></div>
+    <div class="car-dropdown-panel" id="carDropdownPanel"></div>
+  </div>
+
+  <main>
+    <section class="view active" id="view-fuel">
+      <div class="section-hdr" style="margin-top:6px">
+        <span class="section-title">Fuel Log</span>
+        <button class="btn-add" onclick="openFuelModal()">+ Add Fill-up</button>
+      </div>
+      <div class="log-list" id="fuelList"></div>
+    </section>
+
+    <section class="view" id="view-maint">
+      <div id="serviceBanner" style="margin-top:6px"></div>
+      <div class="section-hdr">
+        <span class="section-title">Service Records</span>
+        <button class="btn-add" onclick="openMaintModal()">+ Add Record</button>
+      </div>
+      <div class="log-list" id="maintList"></div>
+    </section>
+
+    <section class="view" id="view-insights">
+      <div style="margin-top:6px" id="insightsPanel"></div>
+    </section>
+
+    <section class="view" id="view-summary">
+      <div style="margin-top:6px"></div>
+      <div class="period-toggle">
+        <button class="period-btn active" id="pBtn-month" onclick="setPeriod('month')">Month</button>
+        <button class="period-btn" id="pBtn-year" onclick="setPeriod('year')">Year</button>
+        <button class="period-btn" id="pBtn-all" onclick="setPeriod('all')">All Time</button>
+      </div>
+      <div class="summary-grid" id="summaryGrid"></div>
+      <div class="section-title" style="margin-bottom:10px">Cost Breakdown</div>
+      <div class="breakdown" id="breakdownTable"></div>
+      <div class="section-title" style="margin:16px 0 10px">MPG History</div>
+      <div class="mpg-chart" id="mpgChart"></div>
+    </section>
+  </main>
+
+  <nav>
+    <button class="active" id="tab-fuel" onclick="switchTab('fuel')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 22V10l7-7 7 7v12H3z"/><path d="M10 22v-6h4v6"/><path d="M20 10h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1"/>
+      </svg>Fuel
+    </button>
+    <button id="tab-maint" onclick="switchTab('maint')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>Service
+    </button>
+    <button id="tab-insights" onclick="switchTab('insights')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>Insights
+    </button>
+    <button id="tab-summary" onclick="switchTab('summary')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+      </svg>Summary
+    </button>
+  </nav>
+</div>
+
+<!-- ══ MODALS ══ -->
+
+<!-- Add / Edit Car -->
+<div class="modal-backdrop" id="carModal">
+  <div class="modal">
+    <div class="modal-title" id="carModalTitle">Add a Car</div>
+    <div class="field">
+      <label>Nickname</label>
+      <input type="text" id="cm-name" placeholder="e.g. My Qashqai" />
     </div>
-    <div class="log-list" id="maintList"></div>
-  </section>
-
-  <!-- INSIGHTS VIEW -->
-  <section class="view" id="view-insights">
-    <div style="margin-top:6px" id="insightsPanel"></div>
-  </section>
-
-  <!-- SUMMARY VIEW -->
-  <section class="view" id="view-summary">
-    <div style="margin-top:6px"></div>
-    <div class="period-toggle">
-      <button class="period-btn active" id="pBtn-month" onclick="setPeriod('month')">Month</button>
-      <button class="period-btn" id="pBtn-year"  onclick="setPeriod('year')">Year</button>
-      <button class="period-btn" id="pBtn-all"   onclick="setPeriod('all')">All Time</button>
+    <div class="field-row">
+      <div class="field"><label>Make</label><input type="text" id="cm-make" placeholder="Nissan" /></div>
+      <div class="field"><label>Model</label><input type="text" id="cm-model" placeholder="Qashqai" /></div>
     </div>
-    <div class="summary-grid" id="summaryGrid"></div>
-    <div class="section-title" style="margin-bottom:10px">Cost Breakdown</div>
-    <div class="breakdown" id="breakdownTable"></div>
-    <div class="section-title" style="margin: 16px 0 10px">MPG History</div>
-    <div class="mpg-chart" id="mpgChart"></div>
-  </section>
-</main>
+    <div class="field-row">
+      <div class="field"><label>Year</label><input type="number" id="cm-year" placeholder="2009" /></div>
+      <div class="field"><label>Engine</label><input type="text" id="cm-engine" placeholder="1.6 Petrol" /></div>
+    </div>
+    <div class="field">
+      <label>Emoji / Icon</label>
+      <input type="text" id="cm-emoji" placeholder="🚗" maxlength="4" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" onclick="saveCar()">Save</button>
+    </div>
+    <div style="margin-top:12px;text-align:center" id="carDeleteRow"></div>
+  </div>
+</div>
 
-<!-- NAV -->
-<nav>
-  <button class="active" id="tab-fuel" onclick="switchTab('fuel')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 22V10l7-7 7 7v12H3z"/><path d="M10 22v-6h4v6"/><path d="M20 10h1a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-1"/>
-    </svg>
-    Fuel
-  </button>
-  <button id="tab-maint" onclick="switchTab('maint')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-    </svg>
-    Service
-  </button>
-  <button id="tab-insights" onclick="switchTab('insights')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-    </svg>
-    Insights
-  </button>
-  <button id="tab-summary" onclick="switchTab('summary')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
-    </svg>
-    Summary
-  </button>
-</nav>
-
-<!-- FUEL MODAL -->
+<!-- Fuel -->
 <div class="modal-backdrop" id="fuelModal">
   <div class="modal">
     <div class="modal-title">Add Fill-up</div>
     <div class="field-row">
-      <div class="field">
-        <label>Date</label>
-        <input type="date" id="f-date" />
-      </div>
-      <div class="field">
-        <label>Mileage (mi)</label>
-        <input type="number" id="f-mileage" placeholder="e.g. 87500" oninput="calcFuelPreview()" />
-      </div>
+      <div class="field"><label>Date</label><input type="date" id="f-date" /></div>
+      <div class="field"><label>Mileage (mi)</label><input type="number" id="f-mileage" placeholder="e.g. 87500" oninput="calcFuelPreview()" /></div>
     </div>
     <div class="calc-hint" id="fuelMileageHint"></div>
     <div class="field-row">
-      <div class="field">
-        <label>Litres</label>
-        <input type="number" id="f-litres" step="0.01" placeholder="e.g. 45.2" oninput="calcFuelPreview()" />
-      </div>
-      <div class="field">
-        <label>Total Cost (£)</label>
-        <input type="number" id="f-cost" step="0.01" placeholder="e.g. 68.50" oninput="calcFuelPreview()" />
-      </div>
+      <div class="field"><label>Litres</label><input type="number" id="f-litres" step="0.01" placeholder="e.g. 45.2" oninput="calcFuelPreview()" /></div>
+      <div class="field"><label>Total Cost (£)</label><input type="number" id="f-cost" step="0.01" placeholder="e.g. 68.50" oninput="calcFuelPreview()" /></div>
     </div>
     <div class="field">
       <label>Previous Mileage (mi)</label>
@@ -390,10 +390,7 @@
       <div class="fp-item"><div class="fp-val" id="fp-miles">—</div><div class="fp-lbl">Miles driven</div></div>
       <div class="fp-item"><div class="fp-val" id="fp-trend">—</div><div class="fp-lbl">vs avg MPG</div></div>
     </div>
-    <div class="field">
-      <label>Notes</label>
-      <input type="text" id="f-notes" placeholder="e.g. Shell, motorway run" />
-    </div>
+    <div class="field"><label>Notes</label><input type="text" id="f-notes" placeholder="e.g. Shell, motorway run" /></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModals()">Cancel</button>
       <button class="btn-primary" onclick="saveFuel()">Save</button>
@@ -401,52 +398,27 @@
   </div>
 </div>
 
-<!-- MAINT MODAL -->
+<!-- Maintenance -->
 <div class="modal-backdrop" id="maintModal">
   <div class="modal">
     <div class="modal-title">Add Service Record</div>
     <div class="field-row">
-      <div class="field">
-        <label>Date</label>
-        <input type="date" id="m-date" />
-      </div>
-      <div class="field">
-        <label>Mileage (mi)</label>
-        <input type="number" id="m-mileage" placeholder="e.g. 87500" />
-      </div>
+      <div class="field"><label>Date</label><input type="date" id="m-date" /></div>
+      <div class="field"><label>Mileage (mi)</label><input type="number" id="m-mileage" placeholder="e.g. 87500" /></div>
     </div>
     <div class="field">
       <label>Service Type</label>
       <select id="m-type">
-        <option value="Oil Change">Oil Change</option>
-        <option value="Tyre Rotation">Tyre Rotation</option>
-        <option value="Tyre Replacement">Tyre Replacement</option>
-        <option value="Brake Service">Brake Service</option>
-        <option value="Air Filter">Air Filter</option>
-        <option value="Spark Plugs">Spark Plugs</option>
-        <option value="Battery">Battery</option>
-        <option value="MOT">MOT</option>
-        <option value="Service (Full)">Service (Full)</option>
-        <option value="Service (Interim)">Service (Interim)</option>
-        <option value="Other">Other</option>
+        <option>Oil Change</option><option>Tyre Rotation</option><option>Tyre Replacement</option>
+        <option>Brake Service</option><option>Air Filter</option><option>Spark Plugs</option>
+        <option>Battery</option><option>MOT</option><option>Service (Full)</option>
+        <option>Service (Interim)</option><option>Other</option>
       </select>
     </div>
-    <div class="field">
-      <label>Cost (£)</label>
-      <input type="number" id="m-cost" step="0.01" placeholder="e.g. 35.00" />
-    </div>
-    <div class="field">
-      <label>Next Service Mileage (optional)</label>
-      <input type="number" id="m-next-mileage" placeholder="e.g. 91500" />
-    </div>
-    <div class="field">
-      <label>Next Service Date (optional)</label>
-      <input type="date" id="m-next-date" />
-    </div>
-    <div class="field">
-      <label>Notes</label>
-      <textarea id="m-notes" placeholder="e.g. Castrol Edge 5W-30 A3/B4, 4.2L"></textarea>
-    </div>
+    <div class="field"><label>Cost (£)</label><input type="number" id="m-cost" step="0.01" placeholder="e.g. 35.00" /></div>
+    <div class="field"><label>Next Service Mileage (optional)</label><input type="number" id="m-next-mileage" placeholder="e.g. 91500" /></div>
+    <div class="field"><label>Next Service Date (optional)</label><input type="date" id="m-next-date" /></div>
+    <div class="field"><label>Notes</label><textarea id="m-notes" placeholder="e.g. Castrol Edge 5W-30 A3/B4, 4.2L"></textarea></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModals()">Cancel</button>
       <button class="btn-primary" onclick="saveMaint()">Save</button>
@@ -454,14 +426,11 @@
   </div>
 </div>
 
-<!-- MILEAGE MODAL -->
+<!-- Mileage -->
 <div class="modal-backdrop" id="mileageModal">
   <div class="modal">
     <div class="modal-title">Update Odometer</div>
-    <div class="field">
-      <label>Current Mileage (mi)</label>
-      <input type="number" id="mm-val" placeholder="e.g. 88000" />
-    </div>
+    <div class="field"><label>Current Mileage (mi)</label><input type="number" id="mm-val" placeholder="e.g. 88000" /></div>
     <div class="calc-hint" id="mileageCalcHint" style="margin-bottom:10px"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModals()">Cancel</button>
@@ -470,22 +439,13 @@
   </div>
 </div>
 
-<!-- SERVICE SETTINGS MODAL -->
+<!-- Service Settings -->
 <div class="modal-backdrop" id="serviceSettingsModal">
   <div class="modal">
     <div class="modal-title">Next Service Settings</div>
-    <div class="field">
-      <label>Next Service Mileage (mi)</label>
-      <input type="number" id="ss-mileage" placeholder="e.g. 91500" />
-    </div>
-    <div class="field">
-      <label>Next Service Date</label>
-      <input type="date" id="ss-date" />
-    </div>
-    <div class="field">
-      <label>Service Interval (miles)</label>
-      <input type="number" id="ss-interval" placeholder="e.g. 6000" />
-    </div>
+    <div class="field"><label>Next Service Mileage (mi)</label><input type="number" id="ss-mileage" /></div>
+    <div class="field"><label>Next Service Date</label><input type="date" id="ss-date" /></div>
+    <div class="field"><label>Service Interval (miles)</label><input type="number" id="ss-interval" placeholder="e.g. 6000" /></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModals()">Cancel</button>
       <button class="btn-primary" onclick="saveServiceSettings()">Save</button>
@@ -493,653 +453,738 @@
   </div>
 </div>
 
-<script>
-// ─── STATE ───────────────────────────────────────────────────────────────────
-let state = {
-  mileage: 0,
-  fuel:  [],   // { id, date, mileage, litres, cost, prevMileage, mpg, notes }
-  maint: [],   // { id, date, mileage, type, cost, nextMileage, nextDate, notes }
-  service: {   // next service config
-    nextMileage: null,
-    nextDate: null,
-    intervalMiles: 6000
-  }
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, deleteDoc, updateDoc, onSnapshot, writeBatch }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// ════════════════════════════════════════════════════════
+// 🔧 REPLACE WITH YOUR FIREBASE CONFIG
+// ════════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyB4CW41mWEbDMAuqS0FRT3DiCm2WyfO6Pw",
+  authDomain: "car-log-6f8b2.firebaseapp.com",
+  projectId: "car-log-6f8b2",
+  storageBucket: "car-log-6f8b2.firebasestorage.app",
+  messagingSenderId: "901463067847",
+  appId: "1:901463067847:web:611889bfa0721e1f28c2e2"
+};
+// ════════════════════════════════════════════════════════
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// ── State ──────────────────────────────────────────────
+let currentUser  = null;
+let cars         = [];         // [{ id, name, make, model, year, engine, emoji }]
+let currentCarId = null;
+let carData      = { fuel:[], maint:[], service:{} };  // live data for selected car
+let unsubFuel    = null;
+let unsubMaint   = null;
+let currentTab   = 'fuel';
+let currentPeriod= 'month';
+let editCarId    = null;       // null = adding new car
+
+function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+function today() { return new Date().toISOString().slice(0,10); }
+
+// ── Toast ──────────────────────────────────────────────
+let toastTimer;
+function showToast(msg='Saving…') {
+  const t = document.getElementById('saveToast');
+  t.textContent = msg; t.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('visible'), 1800);
+}
+
+// ── Auth ───────────────────────────────────────────────
+window.signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { console.error(e); }
 };
 
-function load() {
-  const raw = localStorage.getItem('qashqai-log');
-  if (raw) {
-    const parsed = JSON.parse(raw);
-    state = { ...state, ...parsed };
-    if (!state.service) state.service = { nextMileage: null, nextDate: null, intervalMiles: 6000 };
+window.signOutUser = async () => {
+  if (!confirm('Sign out?')) return;
+  unsubscribeListeners();
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, async user => {
+  document.getElementById('loadingScreen').style.display = 'none';
+  if (user) {
+    currentUser = user;
+    document.getElementById('authScreen').style.display = 'none';
+    await loadCars();
+    if (cars.length === 0) {
+      // Offer to migrate localStorage data on first sign-in
+      await checkAndMigrateLocalStorage();
+      showGarage();
+    } else {
+      showGarage();
+    }
+  } else {
+    currentUser = null;
+    showScreen('auth');
   }
-}
-function save() { localStorage.setItem('qashqai-log', JSON.stringify(state)); }
-function uid()  { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+});
 
-// ─── TABS ────────────────────────────────────────────────────────────────────
-let currentTab = 'fuel';
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('view-' + tab).classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
-  if (tab === 'summary')  renderSummary();
-  if (tab === 'insights') renderInsights();
-  if (tab === 'maint')    renderServiceBanner();
+// ── Screen management ──────────────────────────────────
+function showScreen(name) {
+  document.getElementById('authScreen').style.display   = name==='auth'   ? 'flex' : 'none';
+  document.getElementById('garageScreen').style.display = name==='garage' ? 'block': 'none';
+  document.getElementById('appScreen').style.display    = name==='app'    ? 'block': 'none';
 }
 
-// ─── MILEAGE ─────────────────────────────────────────────────────────────────
-function openMileageModal() {
-  document.getElementById('mm-val').value = state.mileage || '';
-  // Show estimated mileage based on avg daily miles
-  const hint = estimatedMileageToday();
-  document.getElementById('mileageCalcHint').textContent = hint
-    ? '💡 Estimated today: ' + hint.toLocaleString() + ' mi (based on avg daily mileage)'
-    : '';
+function showGarage() {
+  unsubscribeListeners();
+  currentCarId = null;
+  renderGarage();
+  showScreen('garage');
+}
+
+window.goToGarage = showGarage;
+
+// ── Firestore paths ────────────────────────────────────
+const carsCol   = () => collection(db, 'users', currentUser.uid, 'cars');
+const carDoc    = (id) => doc(db, 'users', currentUser.uid, 'cars', id);
+const fuelCol   = (cid) => collection(db, 'users', currentUser.uid, 'cars', cid, 'fuel');
+const fuelDoc   = (cid,id) => doc(db, 'users', currentUser.uid, 'cars', cid, 'fuel', id);
+const maintCol  = (cid) => collection(db, 'users', currentUser.uid, 'cars', cid, 'maint');
+const maintDoc  = (cid,id) => doc(db, 'users', currentUser.uid, 'cars', cid, 'maint', id);
+const settDoc   = (cid) => doc(db, 'users', currentUser.uid, 'cars', cid, 'settings', 'service');
+
+// ── Load cars list ─────────────────────────────────────
+async function loadCars() {
+  const snap = await getDocs(carsCol());
+  cars = snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+
+// ── Garage render ──────────────────────────────────────
+function renderGarage() {
+  // User row
+  const ur = document.getElementById('userRow');
+  const photo = currentUser.photoURL
+    ? `<img class="user-avatar" src="${currentUser.photoURL}" />`
+    : `<div class="user-avatar-placeholder">👤</div>`;
+  ur.innerHTML = `${photo}<div><div class="user-name">${currentUser.displayName||'User'}</div><div class="user-email">${currentUser.email}</div></div><button class="btn-signout" onclick="signOutUser()">Sign out</button>`;
+
+  // Car grid
+  const grid = document.getElementById('carGrid');
+  if (!cars.length) {
+    grid.innerHTML = '<div class="empty-msg" style="padding:16px 0">No cars yet. Add one below.</div>';
+    return;
+  }
+  grid.innerHTML = cars.map(c=>`
+    <div class="car-card" onclick="selectCar('${c.id}')">
+      <div class="car-card-icon">${c.emoji||'🚗'}</div>
+      <div>
+        <div class="car-card-name">${c.name||c.make+' '+c.model}</div>
+        <div class="car-card-sub">${[c.year,c.make,c.model,c.engine].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div class="car-card-arrow" onclick="event.stopPropagation();openEditCarModal('${c.id}')">✏️</div>
+    </div>
+  `).join('');
+}
+
+// ── Select car and load data ───────────────────────────
+async function selectCar(carId) {
+  currentCarId = carId;
+  const car = cars.find(c=>c.id===carId);
+  if (!car) return;
+
+  // Update header
+  document.getElementById('csIcon').textContent = car.emoji||'🚗';
+  document.getElementById('csName').textContent = car.name||`${car.make} ${car.model}`;
+  document.getElementById('csSub').textContent  = [car.year,car.make,car.model].filter(Boolean).join(' ');
+
+  showScreen('app');
+  switchTab('fuel');
+
+  // Load service settings once
+  const sSnap = await getDoc(settDoc(carId));
+  carData.service = sSnap.exists() ? sSnap.data() : { nextMileage:null, nextDate:null, intervalMiles:6000 };
+
+  // Subscribe to fuel
+  unsubFuel && unsubFuel();
+  unsubFuel = onSnapshot(fuelCol(carId), snap => {
+    carData.fuel = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderMileagePill();
+    renderFuelList();
+    if (currentTab==='summary')  renderSummary();
+    if (currentTab==='insights') renderInsights();
+  });
+
+  // Subscribe to maint
+  unsubMaint && unsubMaint();
+  unsubMaint = onSnapshot(maintCol(carId), snap => {
+    carData.maint = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderMaintList();
+    renderServiceBanner();
+    if (currentTab==='summary')  renderSummary();
+    if (currentTab==='insights') renderInsights();
+  });
+
+  renderMileagePill();
+}
+
+window.selectCar = selectCar;
+
+function unsubscribeListeners() {
+  unsubFuel  && unsubFuel();
+  unsubMaint && unsubMaint();
+  unsubFuel = unsubMaint = null;
+  carData = { fuel:[], maint:[], service:{ nextMileage:null, nextDate:null, intervalMiles:6000 } };
+}
+
+// ── Car dropdown ───────────────────────────────────────
+window.toggleCarDropdown = () => {
+  const d = document.getElementById('carDropdown');
+  if (d.classList.contains('open')) { closeCarDropdown(); return; }
+  const panel = document.getElementById('carDropdownPanel');
+  panel.innerHTML = cars.map(c=>`
+    <div class="car-dropdown-item ${c.id===currentCarId?'active':''}" onclick="switchCar('${c.id}')">
+      <span class="cdi-icon">${c.emoji||'🚗'}</span>
+      <div><div class="cdi-name">${c.name||c.make+' '+c.model}</div><div class="cdi-sub">${[c.year,c.make,c.model].filter(Boolean).join(' ')}</div></div>
+      ${c.id===currentCarId?'<span class="cdi-check">✓</span>':''}
+    </div>
+  `).join('') + `<div class="car-dropdown-add" onclick="goToGarage()">🏠 &nbsp;Back to garage</div>`;
+  d.classList.add('open');
+};
+window.closeCarDropdown = () => document.getElementById('carDropdown').classList.remove('open');
+window.switchCar = (id) => { closeCarDropdown(); selectCar(id); };
+
+// ── Add / Edit car modal ───────────────────────────────
+window.openAddCarModal = () => {
+  editCarId = null;
+  document.getElementById('carModalTitle').textContent = 'Add a Car';
+  ['cm-name','cm-make','cm-model','cm-year','cm-engine'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cm-emoji').value = '🚗';
+  document.getElementById('carDeleteRow').innerHTML = '';
+  document.getElementById('carModal').classList.add('open');
+};
+
+window.openEditCarModal = (carId) => {
+  editCarId = carId;
+  const car = cars.find(c=>c.id===carId);
+  if (!car) return;
+  document.getElementById('carModalTitle').textContent = 'Edit Car';
+  document.getElementById('cm-name').value   = car.name||'';
+  document.getElementById('cm-make').value   = car.make||'';
+  document.getElementById('cm-model').value  = car.model||'';
+  document.getElementById('cm-year').value   = car.year||'';
+  document.getElementById('cm-engine').value = car.engine||'';
+  document.getElementById('cm-emoji').value  = car.emoji||'🚗';
+  document.getElementById('carDeleteRow').innerHTML =
+    `<button class="btn-danger" onclick="deleteCar('${carId}')">Delete this car</button>`;
+  document.getElementById('carModal').classList.add('open');
+};
+
+window.saveCar = async () => {
+  const name   = document.getElementById('cm-name').value.trim();
+  const make   = document.getElementById('cm-make').value.trim();
+  const model  = document.getElementById('cm-model').value.trim();
+  const year   = document.getElementById('cm-year').value.trim();
+  const engine = document.getElementById('cm-engine').value.trim();
+  const emoji  = document.getElementById('cm-emoji').value.trim()||'🚗';
+  if (!name && !make) { alert('Enter at least a name or make.'); return; }
+  const data = { name:name||`${make} ${model}`, make, model, year, engine, emoji, updatedAt: Date.now() };
+  showToast('Saving…');
+  if (editCarId) {
+    await setDoc(carDoc(editCarId), data, {merge:true});
+    cars = cars.map(c=>c.id===editCarId?{...c,...data}:c);
+  } else {
+    const ref = await addDoc(carsCol(), {...data, createdAt:Date.now()});
+    cars.push({id:ref.id,...data});
+  }
+  closeModals();
+  renderGarage();
+  showToast('Saved ✓');
+};
+
+window.deleteCar = async (carId) => {
+  if (!confirm('Delete this car and ALL its data? This cannot be undone.')) return;
+  showToast('Deleting…');
+  // Delete all subcollections
+  const batch = writeBatch(db);
+  const fSnap = await getDocs(fuelCol(carId));
+  fSnap.docs.forEach(d=>batch.delete(d.ref));
+  const mSnap = await getDocs(maintCol(carId));
+  mSnap.docs.forEach(d=>batch.delete(d.ref));
+  await batch.commit();
+  await deleteDoc(carDoc(carId));
+  cars = cars.filter(c=>c.id!==carId);
+  closeModals();
+  renderGarage();
+  showToast('Deleted');
+};
+
+// ── localStorage migration ─────────────────────────────
+async function checkAndMigrateLocalStorage() {
+  const raw = localStorage.getItem('qashqai-log');
+  if (!raw) return;
+  let old;
+  try { old = JSON.parse(raw); } catch { return; }
+  if (!old || (!old.fuel?.length && !old.maint?.length)) return;
+
+  const doMigrate = confirm(
+    `Found existing data (${old.fuel?.length||0} fill-ups, ${old.maint?.length||0} service records).\n\nImport into a new car called "Nissan Qashqai"?`
+  );
+  if (!doMigrate) return;
+
+  showToast('Importing…');
+  const carRef = await addDoc(carsCol(), {
+    name:'Nissan Qashqai', make:'Nissan', model:'Qashqai',
+    year:'2009', engine:'1.6 Petrol', emoji:'🚗', createdAt:Date.now()
+  });
+  const batch = writeBatch(db);
+  (old.fuel||[]).forEach(f => {
+    batch.set(doc(fuelCol(carRef.id)), f);
+  });
+  (old.maint||[]).forEach(m => {
+    batch.set(doc(maintCol(carRef.id)), m);
+  });
+  if (old.service) {
+    batch.set(settDoc(carRef.id), old.service);
+  }
+  await batch.commit();
+  cars.push({id:carRef.id, name:'Nissan Qashqai', make:'Nissan', model:'Qashqai', year:'2009', engine:'1.6 Petrol', emoji:'🚗'});
+  localStorage.removeItem('qashqai-log');
+  showToast('Imported ✓');
+}
+
+// ── Mileage ────────────────────────────────────────────
+window.openMileageModal = () => {
+  const cur = getCurrentMileage();
+  document.getElementById('mm-val').value = cur||'';
+  const est = estimatedMileageToday();
+  document.getElementById('mileageCalcHint').textContent = est
+    ? `💡 Estimated today: ${est.toLocaleString()} mi` : '';
   document.getElementById('mileageModal').classList.add('open');
-  setTimeout(() => document.getElementById('mm-val').focus(), 80);
-}
+  setTimeout(()=>document.getElementById('mm-val').focus(),80);
+};
 
-function estimatedMileageToday() {
-  // Use last two mileage points to estimate current mileage
-  const points = state.fuel.filter(f => f.mileage && f.date)
-    .slice().sort((a,b) => new Date(a.date)-new Date(b.date));
-  if (points.length < 2) return null;
-  const last  = points[points.length - 1];
-  const prev  = points[points.length - 2];
-  const daysBetween = (new Date(last.date) - new Date(prev.date)) / 86400000;
-  if (daysBetween <= 0) return null;
-  const dailyMiles = (last.mileage - prev.mileage) / daysBetween;
-  const daysSinceLast = (new Date() - new Date(last.date + 'T12:00:00')) / 86400000;
-  return Math.round(last.mileage + dailyMiles * daysSinceLast);
-}
-
-function saveMileage() {
+window.saveMileage = async () => {
   const v = parseInt(document.getElementById('mm-val').value);
-  if (!v || v < 0) return;
-  state.mileage = v;
-  save();
+  if (!v||v<0) return;
+  // Store as a special doc
+  await setDoc(doc(db,'users',currentUser.uid,'cars',currentCarId,'settings','odometer'),{mileage:v,updatedAt:Date.now()});
+  // Also update car doc
+  await setDoc(carDoc(currentCarId),{mileage:v},{merge:true});
+  cars = cars.map(c=>c.id===currentCarId?{...c,mileage:v}:c);
   renderMileagePill();
   closeModals();
+  showToast('Saved ✓');
+};
+
+function getCurrentMileage() {
+  const car = cars.find(c=>c.id===currentCarId);
+  if (car?.mileage) return car.mileage;
+  // Derive from fuel entries
+  const mis = carData.fuel.filter(f=>f.mileage).map(f=>f.mileage);
+  return mis.length ? Math.max(...mis) : 0;
 }
 
 function renderMileagePill() {
-  document.getElementById('currentMileage').textContent =
-    state.mileage ? state.mileage.toLocaleString() : '—';
+  const m = getCurrentMileage();
+  document.getElementById('currentMileage').textContent = m ? m.toLocaleString() : '—';
 }
 
-// ─── FUEL ─────────────────────────────────────────────────────────────────────
-function openFuelModal() {
+function estimatedMileageToday() {
+  const pts = carData.fuel.filter(f=>f.mileage&&f.date)
+    .slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if (pts.length<2) return null;
+  const last=pts[pts.length-1], prev=pts[pts.length-2];
+  const daysBetween=(new Date(last.date)-new Date(prev.date))/86400000;
+  if (daysBetween<=0) return null;
+  const daily=(last.mileage-prev.mileage)/daysBetween;
+  const daysSince=(new Date()-new Date(last.date+'T12:00:00'))/86400000;
+  return Math.round(last.mileage+daily*daysSince);
+}
+
+// ── Tabs ───────────────────────────────────────────────
+window.switchTab = (tab) => {
+  currentTab = tab;
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if (tab==='summary')  renderSummary();
+  if (tab==='insights') renderInsights();
+  if (tab==='maint')    renderServiceBanner();
+};
+
+// ── Fuel ───────────────────────────────────────────────
+window.openFuelModal = () => {
   document.getElementById('f-date').value = today();
   document.getElementById('f-mileage').value = '';
   document.getElementById('f-litres').value = '';
   document.getElementById('f-cost').value = '';
   document.getElementById('f-notes').value = '';
-  // Auto-fill previous mileage from last fill-up
-  const last = lastFuelEntry();
-  document.getElementById('f-prev-mileage').value = last ? last.mileage || '' : '';
-  // Show estimated current mileage as hint
+  const last = carData.fuel.slice().sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+  document.getElementById('f-prev-mileage').value = last?.mileage||'';
   const est = estimatedMileageToday();
-  document.getElementById('fuelMileageHint').textContent = est
-    ? '💡 Estimated current: ' + est.toLocaleString() + ' mi'
-    : '';
-  document.getElementById('fuelPreviewBox').style.display = 'none';
+  document.getElementById('fuelMileageHint').textContent = est ? `💡 Estimated current: ${est.toLocaleString()} mi` : '';
+  document.getElementById('fuelPreviewBox').style.display='none';
   document.getElementById('fuelModal').classList.add('open');
+};
+
+function avgMpg() {
+  const entries = carData.fuel.filter(f=>f.mpg);
+  return entries.length ? entries.reduce((s,f)=>s+f.mpg,0)/entries.length : null;
 }
 
-function lastFuelEntry() {
-  if (!state.fuel.length) return null;
-  return state.fuel.slice().sort((a,b) => new Date(b.date)-new Date(a.date))[0];
-}
+window.calcFuelPreview = () => {
+  const litres=parseFloat(document.getElementById('f-litres').value);
+  const cost=parseFloat(document.getElementById('f-cost').value);
+  const cur=parseFloat(document.getElementById('f-mileage').value);
+  const prev=parseFloat(document.getElementById('f-prev-mileage').value);
+  const box=document.getElementById('fuelPreviewBox');
+  if (!litres&&!cost&&!cur){box.style.display='none';return;}
+  box.style.display='flex';
+  const miles=(cur&&prev&&cur>prev)?cur-prev:null;
+  document.getElementById('fp-miles').textContent=miles?miles.toLocaleString():'—';
+  let mpgVal=null;
+  if (miles&&litres){
+    mpgVal=(miles/litres)*4.54609;
+    const el=document.getElementById('fp-mpg');
+    el.textContent=mpgVal.toFixed(1);
+    const avg=avgMpg();
+    el.className=avg?(mpgVal>=avg*0.97?'fp-val green':'fp-val red'):'fp-val';
+  } else { document.getElementById('fp-mpg').textContent='—'; document.getElementById('fp-mpg').className='fp-val'; }
+  document.getElementById('fp-ppl').textContent=(litres&&cost)?((cost/litres)*100).toFixed(1)+'p':'—';
+  const avg=avgMpg();
+  const tEl=document.getElementById('fp-trend');
+  if (mpgVal&&avg){const d=mpgVal-avg;tEl.textContent=(d>=0?'+':'')+d.toFixed(1);tEl.className=d>=0?'fp-val green':'fp-val red';}
+  else{tEl.textContent='—';tEl.className='fp-val';}
+};
 
-function avgMpg(excludeId) {
-  const entries = state.fuel.filter(f => f.mpg && f.id !== excludeId);
-  if (!entries.length) return null;
-  return entries.reduce((s,f) => s+f.mpg, 0) / entries.length;
-}
-
-function calcFuelPreview() {
-  const litres  = parseFloat(document.getElementById('f-litres').value);
-  const cost    = parseFloat(document.getElementById('f-cost').value);
-  const cur     = parseFloat(document.getElementById('f-mileage').value);
-  const prev    = parseFloat(document.getElementById('f-prev-mileage').value);
-  const box     = document.getElementById('fuelPreviewBox');
-
-  if (!litres && !cost && !cur) { box.style.display='none'; return; }
-  box.style.display = 'flex';
-
-  // Miles driven
-  const miles = (cur && prev && cur > prev) ? cur - prev : null;
-  document.getElementById('fp-miles').textContent = miles ? miles.toLocaleString() : '—';
-  document.getElementById('fp-miles').className   = 'fp-val';
-
-  // MPG
-  let mpgVal = null;
-  if (miles && litres) {
-    mpgVal = (miles / litres) * 4.54609;
-    const el = document.getElementById('fp-mpg');
-    el.textContent = mpgVal.toFixed(1);
-    const avg = avgMpg(null);
-    if (avg) {
-      el.className = mpgVal >= avg * 0.97 ? 'fp-val green' : 'fp-val red';
-    } else {
-      el.className = 'fp-val';
-    }
-  } else {
-    document.getElementById('fp-mpg').textContent = '—';
-    document.getElementById('fp-mpg').className   = 'fp-val';
+window.saveFuel = async () => {
+  const date=document.getElementById('f-date').value;
+  const mi=parseFloat(document.getElementById('f-mileage').value);
+  const lit=parseFloat(document.getElementById('f-litres').value);
+  const cost=parseFloat(document.getElementById('f-cost').value);
+  const prev=parseFloat(document.getElementById('f-prev-mileage').value);
+  const notes=document.getElementById('f-notes').value.trim();
+  if (!date||!lit||!cost){alert('Date, litres and cost are required.');return;}
+  let mpg=null;
+  if (prev&&mi&&mi>prev) mpg=((mi-prev)/lit)*4.54609;
+  const entry={date,mileage:mi||null,litres:lit,cost,prevMileage:prev||null,mpg,notes,createdAt:Date.now()};
+  showToast('Saving…');
+  await addDoc(fuelCol(currentCarId),entry);
+  if (mi&&mi>(getCurrentMileage()||0)){
+    await setDoc(carDoc(currentCarId),{mileage:mi},{merge:true});
+    cars=cars.map(c=>c.id===currentCarId?{...c,mileage:mi}:c);
   }
+  closeModals();
+  showToast('Saved ✓');
+};
 
-  // p/litre
-  if (litres && cost) {
-    document.getElementById('fp-ppl').textContent = ((cost / litres) * 100).toFixed(1) + 'p';
-  } else {
-    document.getElementById('fp-ppl').textContent = '—';
-  }
-
-  // vs avg trend
-  const avg = avgMpg(null);
-  const trendEl = document.getElementById('fp-trend');
-  if (mpgVal && avg) {
-    const diff = mpgVal - avg;
-    trendEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1);
-    trendEl.className   = diff >= 0 ? 'fp-val green' : 'fp-val red';
-  } else {
-    trendEl.textContent = '—';
-    trendEl.className   = 'fp-val';
-  }
-}
-
-function saveFuel() {
-  const date  = document.getElementById('f-date').value;
-  const mi    = parseFloat(document.getElementById('f-mileage').value);
-  const lit   = parseFloat(document.getElementById('f-litres').value);
-  const cost  = parseFloat(document.getElementById('f-cost').value);
-  const prev  = parseFloat(document.getElementById('f-prev-mileage').value);
-  const notes = document.getElementById('f-notes').value.trim();
-  if (!date || !lit || !cost) { alert('Date, litres and cost are required.'); return; }
-  let mpg = null;
-  if (prev && mi && mi > prev) mpg = ((mi - prev) / lit) * 4.54609;
-  state.fuel.push({ id: uid(), date, mileage: mi || null, litres: lit, cost, prevMileage: prev || null, mpg, notes });
-  if (mi && mi > (state.mileage || 0)) state.mileage = mi;
-  save(); renderMileagePill(); renderFuelList(); closeModals();
-}
-
-function deleteFuel(id) {
+window.deleteFuel = async (id) => {
   if (!confirm('Delete this fill-up?')) return;
-  state.fuel = state.fuel.filter(f => f.id !== id);
-  save(); renderFuelList();
-}
+  showToast('Deleting…');
+  await deleteDoc(fuelDoc(currentCarId,id));
+  showToast('Deleted');
+};
 
 function renderFuelList() {
-  const el = document.getElementById('fuelList');
-  const sorted = state.fuel.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
-  if (!sorted.length) {
-    el.innerHTML = '<div class="empty-msg">No fill-ups yet. Add your first one.</div>';
-    return;
-  }
-  const avg = avgMpg(null);
-  el.innerHTML = sorted.map(f => {
-    let mpgClass = '';
-    if (f.mpg && avg) mpgClass = f.mpg >= avg * 0.97 ? '' : 'red';
-    return `
+  const el=document.getElementById('fuelList');
+  const sorted=carData.fuel.slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if (!sorted.length){el.innerHTML='<div class="empty-msg">No fill-ups yet.</div>';return;}
+  const avg=avgMpg();
+  el.innerHTML=sorted.map(f=>`
     <div class="log-item">
       <div class="log-left">
         <div class="log-icon fuel">⛽</div>
         <div>
           <div class="log-title">${fmtDate(f.date)}</div>
-          <div class="log-meta">${f.litres}L${f.mileage ? ' · ' + f.mileage.toLocaleString() + ' mi' : ''}${f.notes ? ' · ' + f.notes : ''}</div>
+          <div class="log-meta">${f.litres}L${f.mileage?' · '+f.mileage.toLocaleString()+' mi':''}${f.notes?' · '+f.notes:''}</div>
         </div>
       </div>
       <div class="log-right">
         <div class="log-cost">£${f.cost.toFixed(2)}</div>
-        ${f.mpg ? `<div class="log-mpg ${mpgClass}">${f.mpg.toFixed(1)} MPG</div>` : ''}
+        ${f.mpg?`<div class="log-mpg ${avg&&f.mpg<avg*0.97?'red':''}">${f.mpg.toFixed(1)} MPG</div>`:''}
       </div>
-      <button class="log-del" onclick="deleteFuel('${f.id}')" title="Delete">✕</button>
-    </div>`;
-  }).join('');
+      <button class="log-del" onclick="deleteFuel('${f.id}')">✕</button>
+    </div>`).join('');
 }
 
-// ─── MAINTENANCE ──────────────────────────────────────────────────────────────
-function openMaintModal() {
-  document.getElementById('m-date').value = today();
-  document.getElementById('m-mileage').value = state.mileage || '';
-  document.getElementById('m-type').value = 'Oil Change';
-  document.getElementById('m-cost').value = '';
-  document.getElementById('m-next-mileage').value =
-    state.mileage && state.service.intervalMiles
-      ? state.mileage + state.service.intervalMiles
-      : '';
-  document.getElementById('m-next-date').value = '';
-  document.getElementById('m-notes').value = '';
+// ── Maintenance ────────────────────────────────────────
+window.openMaintModal = () => {
+  document.getElementById('m-date').value=today();
+  document.getElementById('m-mileage').value=getCurrentMileage()||'';
+  document.getElementById('m-type').value='Oil Change';
+  document.getElementById('m-cost').value='';
+  const mi=getCurrentMileage();
+  const intv=carData.service?.intervalMiles||6000;
+  document.getElementById('m-next-mileage').value=mi?mi+intv:'';
+  document.getElementById('m-next-date').value='';
+  document.getElementById('m-notes').value='';
   document.getElementById('maintModal').classList.add('open');
-}
+};
 
-function saveMaint() {
-  const date       = document.getElementById('m-date').value;
-  const mi         = parseFloat(document.getElementById('m-mileage').value);
-  const type       = document.getElementById('m-type').value;
-  const cost       = parseFloat(document.getElementById('m-cost').value);
-  const nextMil    = parseFloat(document.getElementById('m-next-mileage').value);
-  const nextDate   = document.getElementById('m-next-date').value;
-  const notes      = document.getElementById('m-notes').value.trim();
-  if (!date || !type) { alert('Date and type are required.'); return; }
-  state.maint.push({ id: uid(), date, mileage: mi || null, type, cost: cost || 0, nextMileage: nextMil || null, nextDate: nextDate || null, notes });
-  // Update next service settings from the most recent entry that has them
-  if (nextMil) state.service.nextMileage = nextMil;
-  if (nextDate) state.service.nextDate = nextDate;
-  if (mi && mi > (state.mileage || 0)) state.mileage = mi;
-  save(); renderMileagePill(); renderMaintList(); renderServiceBanner(); closeModals();
-}
+window.saveMaint = async () => {
+  const date=document.getElementById('m-date').value;
+  const mi=parseFloat(document.getElementById('m-mileage').value);
+  const type=document.getElementById('m-type').value;
+  const cost=parseFloat(document.getElementById('m-cost').value);
+  const nextMil=parseFloat(document.getElementById('m-next-mileage').value);
+  const nextDate=document.getElementById('m-next-date').value;
+  const notes=document.getElementById('m-notes').value.trim();
+  if (!date||!type){alert('Date and type are required.');return;}
+  const entry={date,mileage:mi||null,type,cost:cost||0,nextMileage:nextMil||null,nextDate:nextDate||null,notes,createdAt:Date.now()};
+  showToast('Saving…');
+  await addDoc(maintCol(currentCarId),entry);
+  // Update service settings if next service was set
+  if (nextMil||nextDate){
+    const upd={...carData.service};
+    if (nextMil)  upd.nextMileage=nextMil;
+    if (nextDate) upd.nextDate=nextDate;
+    carData.service=upd;
+    await setDoc(settDoc(currentCarId),upd);
+  }
+  if (mi&&mi>(getCurrentMileage()||0)){
+    await setDoc(carDoc(currentCarId),{mileage:mi},{merge:true});
+    cars=cars.map(c=>c.id===currentCarId?{...c,mileage:mi}:c);
+  }
+  closeModals();
+  showToast('Saved ✓');
+};
 
-function deleteMaint(id) {
+window.deleteMaint = async (id) => {
   if (!confirm('Delete this record?')) return;
-  state.maint = state.maint.filter(m => m.id !== id);
-  save(); renderMaintList(); renderServiceBanner();
-}
+  showToast('Deleting…');
+  await deleteDoc(maintDoc(currentCarId,id));
+  showToast('Deleted');
+};
 
 function renderMaintList() {
-  const el = document.getElementById('maintList');
-  const sorted = state.maint.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
-  if (!sorted.length) {
-    el.innerHTML = '<div class="empty-msg">No service records yet.</div>';
-    return;
-  }
-  el.innerHTML = sorted.map(m => `
+  const el=document.getElementById('maintList');
+  const sorted=carData.maint.slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if (!sorted.length){el.innerHTML='<div class="empty-msg">No service records yet.</div>';return;}
+  el.innerHTML=sorted.map(m=>`
     <div class="log-item">
       <div class="log-left">
         <div class="log-icon maint">🔧</div>
         <div>
           <div class="log-title">${m.type}</div>
-          <div class="log-meta">${fmtDate(m.date)}${m.mileage ? ' · ' + m.mileage.toLocaleString() + ' mi' : ''}${m.notes ? ' · ' + m.notes : ''}</div>
-          ${m.nextMileage || m.nextDate ? `<div class="log-meta" style="color:var(--amber)">Next: ${m.nextMileage ? m.nextMileage.toLocaleString() + ' mi' : ''}${m.nextMileage && m.nextDate ? ' · ' : ''}${m.nextDate ? fmtDate(m.nextDate) : ''}</div>` : ''}
+          <div class="log-meta">${fmtDate(m.date)}${m.mileage?' · '+m.mileage.toLocaleString()+' mi':''}${m.notes?' · '+m.notes:''}</div>
+          ${m.nextMileage||m.nextDate?`<div class="log-meta" style="color:var(--amber)">Next: ${m.nextMileage?m.nextMileage.toLocaleString()+' mi':''}${m.nextMileage&&m.nextDate?' · ':''}${m.nextDate?fmtDate(m.nextDate):''}</div>`:''}
         </div>
       </div>
-      <div class="log-right">
-        <div class="log-cost">${m.cost > 0 ? '£' + m.cost.toFixed(2) : '—'}</div>
-      </div>
-      <button class="log-del" onclick="deleteMaint('${m.id}')" title="Delete">✕</button>
-    </div>
-  `).join('');
+      <div class="log-right"><div class="log-cost">${m.cost>0?'£'+m.cost.toFixed(2):'—'}</div></div>
+      <button class="log-del" onclick="deleteMaint('${m.id}')">✕</button>
+    </div>`).join('');
 }
 
-// ─── SERVICE BANNER ───────────────────────────────────────────────────────────
-function openServiceSettingsModal() {
-  document.getElementById('ss-mileage').value  = state.service.nextMileage || '';
-  document.getElementById('ss-date').value     = state.service.nextDate || '';
-  document.getElementById('ss-interval').value = state.service.intervalMiles || 6000;
+// ── Service Banner ─────────────────────────────────────
+window.openServiceSettingsModal = () => {
+  document.getElementById('ss-mileage').value =carData.service?.nextMileage||'';
+  document.getElementById('ss-date').value    =carData.service?.nextDate||'';
+  document.getElementById('ss-interval').value=carData.service?.intervalMiles||6000;
   document.getElementById('serviceSettingsModal').classList.add('open');
-}
+};
 
-function saveServiceSettings() {
-  state.service.nextMileage  = parseFloat(document.getElementById('ss-mileage').value) || null;
-  state.service.nextDate     = document.getElementById('ss-date').value || null;
-  state.service.intervalMiles = parseFloat(document.getElementById('ss-interval').value) || 6000;
-  save(); renderServiceBanner(); closeModals();
-}
+window.saveServiceSettings = async () => {
+  const upd={
+    nextMileage: parseFloat(document.getElementById('ss-mileage').value)||null,
+    nextDate:    document.getElementById('ss-date').value||null,
+    intervalMiles:parseFloat(document.getElementById('ss-interval').value)||6000
+  };
+  carData.service=upd;
+  await setDoc(settDoc(currentCarId),upd);
+  renderServiceBanner();
+  closeModals();
+  showToast('Saved ✓');
+};
 
 function renderServiceBanner() {
-  const el = document.getElementById('serviceBanner');
-  const { nextMileage, nextDate, intervalMiles } = state.service;
-  const cur = state.mileage;
-
-  if (!nextMileage && !nextDate) {
-    el.innerHTML = `
-      <div class="insight-card neutral">
-        <div class="insight-icon">🔧</div>
-        <div class="insight-body">
-          <div class="insight-title">Next Service</div>
-          <div class="insight-text">No service reminder set. <span style="color:var(--accent);cursor:pointer" onclick="openServiceSettingsModal()">Set one →</span></div>
-        </div>
-      </div>`;
+  const el=document.getElementById('serviceBanner');
+  const {nextMileage,nextDate,intervalMiles}=carData.service||{};
+  const cur=getCurrentMileage();
+  if (!nextMileage&&!nextDate){
+    el.innerHTML=`<div class="insight-card neutral"><div class="insight-icon">🔧</div><div class="insight-body"><div class="insight-title">Next Service</div><div class="insight-text">No reminder set. <span style="color:var(--accent);cursor:pointer" onclick="openServiceSettingsModal()">Set one →</span></div></div></div>`;
     return;
   }
-
-  // Mileage progress
-  let milesLeft = null, pct = 0, status = 'ok';
-  if (nextMileage && cur) {
-    milesLeft = nextMileage - cur;
-    const interval = intervalMiles || 6000;
-    pct = Math.min(100, Math.max(0, ((interval - milesLeft) / interval) * 100));
-    if (milesLeft <= 0)   status = 'overdue';
-    else if (milesLeft < 500) status = 'soon';
-    else status = 'ok';
+  let milesLeft=null,pct=0,status='ok';
+  if (nextMileage&&cur){
+    milesLeft=nextMileage-cur;
+    const intv=intervalMiles||6000;
+    pct=Math.min(100,Math.max(0,((intv-milesLeft)/intv)*100));
+    status=milesLeft<=0?'overdue':milesLeft<500?'soon':'ok';
   }
-
-  // Date progress
-  let daysLeft = null;
-  if (nextDate) {
-    daysLeft = Math.ceil((new Date(nextDate + 'T12:00:00') - new Date()) / 86400000);
-    if (daysLeft <= 0 && status !== 'overdue') status = 'overdue';
-    else if (daysLeft <= 30 && status === 'ok') status = 'soon';
+  let daysLeft=null;
+  if (nextDate){
+    daysLeft=Math.ceil((new Date(nextDate+'T12:00:00')-new Date())/86400000);
+    if (daysLeft<=0&&status!=='overdue') status='overdue';
+    else if (daysLeft<=30&&status==='ok') status='soon';
   }
-
-  // Estimated date from avg daily mileage
-  let estDateStr = '';
-  if (milesLeft > 0) {
-    const dailyMi = avgDailyMiles();
-    if (dailyMi > 0) {
-      const daysToService = Math.ceil(milesLeft / dailyMi);
-      const estDate = new Date();
-      estDate.setDate(estDate.getDate() + daysToService);
-      estDateStr = estDate.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  let estDateStr='';
+  if (milesLeft>0){
+    const d=avgDailyMiles();
+    if (d>0){
+      const dt=new Date();dt.setDate(dt.getDate()+Math.ceil(milesLeft/d));
+      estDateStr=dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
     }
   }
-
-  const labelMap   = { ok:'On Track', soon:'Due Soon', overdue:'Overdue' };
-  const label      = labelMap[status];
-
-  el.innerHTML = `
+  const lbl={ok:'On Track',soon:'Due Soon',overdue:'Overdue'}[status];
+  el.innerHTML=`
     <div class="service-banner ${status}">
-      <div class="banner-top">
-        <span class="banner-label ${status}">${label}</span>
-        <span class="banner-edit" onclick="openServiceSettingsModal()">Edit reminder</span>
-      </div>
-      ${nextMileage && cur ? `
-        <div class="banner-progress-track">
-          <div class="banner-progress-fill banner-fill-${status}" style="width:${pct.toFixed(1)}%"></div>
-        </div>` : ''}
+      <div class="banner-top"><span class="banner-label ${status}">${lbl}</span><span class="banner-edit" onclick="openServiceSettingsModal()">Edit</span></div>
+      ${nextMileage&&cur?`<div class="banner-progress-track"><div class="banner-progress-fill banner-fill-${status}" style="width:${pct.toFixed(1)}%"></div></div>`:''}
       <div class="banner-stats">
-        ${nextMileage ? `<div class="banner-stat">
-          <div class="banner-stat-val">${milesLeft !== null ? (milesLeft > 0 ? milesLeft.toLocaleString() : 'Overdue') : '—'}</div>
-          <div class="banner-stat-lbl">Miles left</div>
-        </div>` : '<div class="banner-stat"></div>'}
-        ${nextDate ? `<div class="banner-stat">
-          <div class="banner-stat-val">${daysLeft !== null ? (daysLeft > 0 ? daysLeft + 'd' : 'Past due') : '—'}</div>
-          <div class="banner-stat-lbl">Days left</div>
-        </div>` : '<div class="banner-stat"></div>'}
-        <div class="banner-stat">
-          <div class="banner-stat-val" style="font-size:12px;font-weight:600">${estDateStr || (nextMileage ? nextMileage.toLocaleString() + ' mi' : '—')}</div>
-          <div class="banner-stat-lbl">${estDateStr ? 'Est. date' : 'Target'}</div>
-        </div>
+        <div class="banner-stat"><div class="banner-stat-val">${milesLeft!==null?(milesLeft>0?milesLeft.toLocaleString():'Overdue'):'—'}</div><div class="banner-stat-lbl">Miles left</div></div>
+        <div class="banner-stat"><div class="banner-stat-val">${daysLeft!==null?(daysLeft>0?daysLeft+'d':'Past due'):'—'}</div><div class="banner-stat-lbl">Days left</div></div>
+        <div class="banner-stat"><div class="banner-stat-val" style="font-size:12px;font-weight:600">${estDateStr||'—'}</div><div class="banner-stat-lbl">Est. date</div></div>
       </div>
     </div>`;
 }
 
-// ─── INSIGHTS ─────────────────────────────────────────────────────────────────
+// ── Insights ───────────────────────────────────────────
 function renderInsights() {
-  const el = document.getElementById('insightsPanel');
-  const cards = [];
+  const el=document.getElementById('insightsPanel');
+  const cards=[];
+  const fs=carData.fuel.filter(f=>f.mpg).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const allMpgs=fs.map(f=>f.mpg);
+  const avg=allMpgs.length?allMpgs.reduce((a,b)=>a+b,0)/allMpgs.length:null;
+  const dailyMi=avgDailyMiles();
 
-  const fuelSorted = state.fuel.filter(f=>f.mpg).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const allMpgs    = fuelSorted.map(f=>f.mpg);
-  const avg        = allMpgs.length ? allMpgs.reduce((a,b)=>a+b,0)/allMpgs.length : null;
-  const recent5    = fuelSorted.slice(-5).map(f=>f.mpg);
-  const recent5avg = recent5.length ? recent5.reduce((a,b)=>a+b,0)/recent5.length : null;
-  const dailyMi    = avgDailyMiles();
-
-  // ── MPG Trend
-  if (fuelSorted.length >= 3) {
-    const first3avg = fuelSorted.slice(0,3).map(f=>f.mpg).reduce((a,b)=>a+b,0)/3;
-    const last3avg  = fuelSorted.slice(-3).map(f=>f.mpg).reduce((a,b)=>a+b,0)/3;
-    const diff      = last3avg - first3avg;
-    const pct       = ((diff/first3avg)*100).toFixed(1);
-    if (Math.abs(diff) > 0.5) {
-      cards.push({
-        color: diff > 0 ? 'green' : 'red',
-        icon:  diff > 0 ? '📈' : '📉',
-        title: diff > 0 ? 'MPG improving' : 'MPG declining',
-        text:  `Your recent average is <strong>${last3avg.toFixed(1)} MPG</strong>, ${diff > 0 ? 'up' : 'down'} <strong>${Math.abs(pct)}%</strong> from your first few fill-ups (${first3avg.toFixed(1)} MPG). ${diff < 0 ? 'Consider checking tyre pressures or air filter.' : 'Keep it up.'}`
-      });
-    } else {
-      cards.push({
-        color: 'neutral', icon: '➡️', title: 'MPG consistent',
-        text: `Your efficiency has been stable at around <strong>${avg.toFixed(1)} MPG</strong> across all recorded fill-ups.`
-      });
+  if (fs.length>=3){
+    const f3=fs.slice(0,3).map(f=>f.mpg).reduce((a,b)=>a+b,0)/3;
+    const l3=fs.slice(-3).map(f=>f.mpg).reduce((a,b)=>a+b,0)/3;
+    const diff=l3-f3;
+    cards.push(Math.abs(diff)>0.5
+      ?{color:diff>0?'green':'red',icon:diff>0?'📈':'📉',title:diff>0?'MPG improving':'MPG declining',
+        text:`Recent average is <strong>${l3.toFixed(1)} MPG</strong>, ${diff>0?'up':'down'} <strong>${Math.abs(((diff/f3)*100)).toFixed(1)}%</strong> from your earliest fill-ups (${f3.toFixed(1)} MPG).`}
+      :{color:'neutral',icon:'➡️',title:'MPG consistent',text:`Stable at around <strong>${avg?.toFixed(1)} MPG</strong>.`});
+  }
+  if (allMpgs.length>=2){
+    const best=fs.reduce((a,b)=>a.mpg>b.mpg?a:b);
+    const worst=fs.reduce((a,b)=>a.mpg<b.mpg?a:b);
+    cards.push({color:'blue',icon:'🏆',title:'Best & worst fill-up',
+      text:`Best: <strong>${best.mpg.toFixed(1)} MPG</strong> on ${fmtDate(best.date)}. Worst: <strong>${worst.mpg.toFixed(1)} MPG</strong> on ${fmtDate(worst.date)}. Spread of <strong>${(best.mpg-worst.mpg).toFixed(1)} MPG</strong>.`});
+  }
+  const totalFuelCost=carData.fuel.reduce((s,f)=>s+f.cost,0);
+  const totalMiles=carData.fuel.filter(f=>f.mileage&&f.prevMileage).reduce((s,f)=>s+(f.mileage-f.prevMileage),0);
+  if (totalMiles>0){
+    cards.push({color:'neutral',icon:'💷',title:'Fuel cost per mile',
+      text:`Roughly <strong>${((totalFuelCost/totalMiles)*100).toFixed(1)}p per mile</strong> across ${totalMiles.toLocaleString()} tracked miles. Total fuel spend: <strong>£${totalFuelCost.toFixed(2)}</strong>.`});
+  }
+  if (dailyMi>0){
+    const ann=Math.round(dailyMi*365);
+    cards.push({color:'blue',icon:'🗺️',title:'Mileage projection',
+      text:`Averaging <strong>${Math.round(dailyMi)} miles/day</strong> — roughly <strong>${ann.toLocaleString()} miles/year</strong>. ${ann>12000?'Above':'Below'} average UK mileage (12,000/yr).`});
+    if (totalMiles>0){
+      const cpm=totalFuelCost/totalMiles;
+      const dLeft=Math.ceil((new Date(new Date().getFullYear(),11,31)-new Date())/86400000);
+      cards.push({color:'amber',icon:'📅',title:'Projected fuel cost to year-end',
+        text:`Estimated <strong>£${(dailyMi*dLeft*cpm).toFixed(0)}</strong> in fuel for the remaining ${dLeft} days of the year.`});
     }
   }
-
-  // ── Best / worst fill-up
-  if (allMpgs.length >= 2) {
-    const best  = fuelSorted.reduce((a,b)=>a.mpg>b.mpg?a:b);
-    const worst = fuelSorted.reduce((a,b)=>a.mpg<b.mpg?a:b);
-    cards.push({
-      color: 'blue', icon: '🏆', title: 'Best & worst fill-up',
-      text: `Best: <strong>${best.mpg.toFixed(1)} MPG</strong> on ${fmtDate(best.date)}${best.notes?' ('+best.notes+')':''}. Worst: <strong>${worst.mpg.toFixed(1)} MPG</strong> on ${fmtDate(worst.date)}${worst.notes?' ('+worst.notes+')':''}. Difference of <strong>${(best.mpg-worst.mpg).toFixed(1)} MPG</strong>.`
-    });
+  const ppl=carData.fuel.filter(f=>f.litres&&f.cost).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if (ppl.length>=3){
+    const pp=ppl.map(f=>(f.cost/f.litres)*100);
+    const f3=pp.slice(0,3).reduce((a,b)=>a+b,0)/3;
+    const l3=pp.slice(-3).reduce((a,b)=>a+b,0)/3;
+    const d=l3-f3;
+    if (Math.abs(d)>2) cards.push({color:d<0?'green':'amber',icon:d<0?'⬇️':'⬆️',
+      title:'Fuel price '+(d<0?'dropping':'rising'),
+      text:`Average price moved from <strong>${f3.toFixed(1)}p/L</strong> to <strong>${l3.toFixed(1)}p/L</strong> — a change of <strong>${Math.abs(d).toFixed(1)}p/L</strong>.`});
   }
-
-  // ── Avg cost per mile
-  const totalFuelCost = state.fuel.reduce((s,f)=>s+f.cost,0);
-  const totalMiles    = state.fuel.filter(f=>f.mileage&&f.prevMileage).reduce((s,f)=>s+(f.mileage-f.prevMileage),0);
-  if (totalMiles > 0) {
-    const cpm = (totalFuelCost / totalMiles * 100).toFixed(1);
-    cards.push({
-      color: 'neutral', icon: '💷', title: 'Fuel cost per mile',
-      text: `You're paying roughly <strong>${cpm}p per mile</strong> in fuel across ${totalMiles.toLocaleString()} tracked miles. Total fuel spend logged: <strong>£${totalFuelCost.toFixed(2)}</strong>.`
-    });
-  }
-
-  // ── Avg daily mileage + projection
-  if (dailyMi > 0) {
-    const annualMi = Math.round(dailyMi * 365);
-    cards.push({
-      color: 'blue', icon: '🗺️', title: 'Mileage projection',
-      text: `Based on your fill-up history, you're averaging <strong>${Math.round(dailyMi)} miles/day</strong> — roughly <strong>${annualMi.toLocaleString()} miles/year</strong>. ${annualMi > 12000 ? 'Higher than average UK mileage (12,000/yr).' : 'Below average UK mileage (12,000/yr).'}`
-    });
-
-    // Estimated cost for rest of year
-    if (avg && totalFuelCost && totalMiles) {
-      const cpm = totalFuelCost / totalMiles;
-      const now  = new Date();
-      const eoy  = new Date(now.getFullYear(), 11, 31);
-      const daysLeft = Math.ceil((eoy - now) / 86400000);
-      const projMiles = dailyMi * daysLeft;
-      const projCost  = (projMiles * cpm).toFixed(0);
-      cards.push({
-        color: 'amber', icon: '📅', title: 'Projected fuel cost to year-end',
-        text: `At your current rate, you'll drive roughly <strong>${Math.round(projMiles).toLocaleString()} more miles</strong> this year, costing an estimated <strong>£${projCost}</strong> in fuel.`
-      });
+  const {nextMileage}=carData.service||{};
+  if (nextMileage){
+    const left=nextMileage-getCurrentMileage();
+    if (left>0&&dailyMi>0){
+      const days=Math.ceil(left/dailyMi);
+      const dt=new Date();dt.setDate(dt.getDate()+days);
+      cards.push({color:left<500?'amber':'neutral',icon:'🔧',title:'Next service estimate',
+        text:`At your current rate, service in approximately <strong>${days} days</strong> (around <strong>${dt.toLocaleDateString('en-GB',{day:'numeric',month:'long'})}</strong>). ${left.toLocaleString()} miles remaining.`});
     }
   }
-
-  // ── Fuel price trend
-  const withPpl = state.fuel.filter(f=>f.litres&&f.cost).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
-  if (withPpl.length >= 3) {
-    const ppls = withPpl.map(f=>(f.cost/f.litres)*100);
-    const first3ppl = ppls.slice(0,3).reduce((a,b)=>a+b,0)/3;
-    const last3ppl  = ppls.slice(-3).reduce((a,b)=>a+b,0)/3;
-    const diff = last3ppl - first3ppl;
-    if (Math.abs(diff) > 2) {
-      cards.push({
-        color: diff < 0 ? 'green' : 'amber', icon: diff < 0 ? '⬇️' : '⬆️',
-        title: 'Fuel price ' + (diff < 0 ? 'dropping' : 'rising'),
-        text: `Your average fuel price has ${diff < 0 ? 'decreased' : 'increased'} from <strong>${first3ppl.toFixed(1)}p/L</strong> to <strong>${last3ppl.toFixed(1)}p/L</strong> — a change of <strong>${Math.abs(diff).toFixed(1)}p/L</strong>.`
-      });
-    }
-  }
-
-  // ── Service reminder nudge
-  const { nextMileage, nextDate } = state.service;
-  if (nextMileage && state.mileage) {
-    const left = nextMileage - state.mileage;
-    if (left > 0 && dailyMi > 0) {
-      const daysToService = Math.ceil(left / dailyMi);
-      const estDate = new Date();
-      estDate.setDate(estDate.getDate() + daysToService);
-      cards.push({
-        color: left < 500 ? 'amber' : 'neutral', icon: '🔧', title: 'Next service estimate',
-        text: `At your current mileage rate, you'll reach your next service in approximately <strong>${daysToService} days</strong> (around <strong>${estDate.toLocaleDateString('en-GB',{day:'numeric',month:'long'})}</strong>). ${left.toLocaleString()} miles remaining.`
-      });
-    }
-  }
-
-  // ── No data fallback
-  if (!cards.length) {
-    el.innerHTML = '<div class="empty-msg" style="padding-top:60px">Add fill-ups to start seeing insights.</div>';
-    return;
-  }
-
-  el.innerHTML = `
-    <div class="section-title" style="margin-bottom:12px">Insights</div>
-    ${cards.map(c=>`
-      <div class="insight-card ${c.color}">
-        <div class="insight-icon">${c.icon}</div>
-        <div class="insight-body">
-          <div class="insight-title">${c.title}</div>
-          <div class="insight-text">${c.text}</div>
-        </div>
-      </div>
-    `).join('')}`;
+  if (!cards.length){el.innerHTML='<div class="empty-msg" style="padding-top:60px">Add fill-ups to start seeing insights.</div>';return;}
+  el.innerHTML=`<div class="section-title" style="margin-bottom:12px">Insights</div>`+
+    cards.map(c=>`<div class="insight-card ${c.color}"><div class="insight-icon">${c.icon}</div><div class="insight-body"><div class="insight-title">${c.title}</div><div class="insight-text">${c.text}</div></div></div>`).join('');
 }
 
-// ─── SUMMARY ─────────────────────────────────────────────────────────────────
-let currentPeriod = 'month';
-
-function setPeriod(p) {
-  currentPeriod = p;
-  ['month','year','all'].forEach(x => {
-    document.getElementById('pBtn-'+x).classList.toggle('active', x===p);
-  });
+// ── Summary ────────────────────────────────────────────
+window.setPeriod = (p) => {
+  currentPeriod=p;
+  ['month','year','all'].forEach(x=>document.getElementById('pBtn-'+x).classList.toggle('active',x===p));
   renderSummary();
-}
+};
 
-function filterByPeriod(arr) {
-  const now = new Date();
-  return arr.filter(r => {
-    const d = new Date(r.date);
-    if (currentPeriod==='month') return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+function filterByPeriod(arr){
+  const now=new Date();
+  return arr.filter(r=>{
+    const d=new Date(r.date);
+    if (currentPeriod==='month') return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();
     if (currentPeriod==='year')  return d.getFullYear()===now.getFullYear();
     return true;
   });
 }
 
-function renderSummary() {
-  const fuel  = filterByPeriod(state.fuel);
-  const maint = filterByPeriod(state.maint);
+function renderSummary(){
+  const fuel=filterByPeriod(carData.fuel), maint=filterByPeriod(carData.maint);
+  const fuelCost=fuel.reduce((s,f)=>s+f.cost,0);
+  const maintCost=maint.reduce((s,m)=>s+m.cost,0);
+  const litres=fuel.reduce((s,f)=>s+f.litres,0);
+  const mpgs=fuel.filter(f=>f.mpg).map(f=>f.mpg);
+  const avg=mpgs.length?mpgs.reduce((a,b)=>a+b,0)/mpgs.length:null;
+  const prevFuel=prevPeriodFuel(), prevMpgs=prevFuel.filter(f=>f.mpg).map(f=>f.mpg);
+  const prevAvg=prevMpgs.length?prevMpgs.reduce((a,b)=>a+b,0)/prevMpgs.length:null;
+  const trendHtml=(currentPeriod!=='all'&&avg&&prevAvg)
+    ?`<span class="trend-arrow" style="color:${avg>=prevAvg?'var(--green)':'var(--red)'}">${avg>=prevAvg?'▲':'▼'}${Math.abs(avg-prevAvg).toFixed(1)}</span>`:'';
+  const periodLbl=currentPeriod==='month'?new Date().toLocaleString('default',{month:'long',year:'numeric'}):currentPeriod==='year'?new Date().getFullYear():'All time';
 
-  const fuelCost  = fuel.reduce((s,f)=>s+f.cost,0);
-  const maintCost = maint.reduce((s,m)=>s+m.cost,0);
-  const total     = fuelCost + maintCost;
-  const litres    = fuel.reduce((s,f)=>s+f.litres,0);
-  const mpgs      = fuel.filter(f=>f.mpg).map(f=>f.mpg);
-  const avg       = mpgs.length ? mpgs.reduce((a,b)=>a+b,0)/mpgs.length : null;
+  document.getElementById('summaryGrid').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Total Spend</div><div class="stat-value accent">£${(fuelCost+maintCost).toFixed(2)}</div><div class="stat-sub">${periodLbl}</div></div>
+    <div class="stat-card"><div class="stat-label">Fuel Cost</div><div class="stat-value">£${fuelCost.toFixed(2)}</div><div class="stat-sub">${fuel.length} fill-up${fuel.length!==1?'s':''} · ${litres.toFixed(1)}L</div></div>
+    <div class="stat-card"><div class="stat-label">Service Cost</div><div class="stat-value">£${maintCost.toFixed(2)}</div><div class="stat-sub">${maint.length} record${maint.length!==1?'s':''}</div></div>
+    <div class="stat-card"><div class="stat-label">Avg MPG</div><div class="stat-value green">${avg?avg.toFixed(1):'—'}${trendHtml}</div><div class="stat-sub">${mpgs.length} with data</div></div>`;
 
-  // MPG trend vs previous period
-  let trendHtml = '';
-  if (currentPeriod !== 'all' && avg) {
-    const prevFuel = prevPeriodFuel();
-    const prevMpgs = prevFuel.filter(f=>f.mpg).map(f=>f.mpg);
-    const prevAvg  = prevMpgs.length ? prevMpgs.reduce((a,b)=>a+b,0)/prevMpgs.length : null;
-    if (prevAvg) {
-      const diff = avg - prevAvg;
-      trendHtml = `<span class="trend-arrow" style="color:${diff>=0?'var(--green)':'var(--red)'}">${diff>=0?'▲':'▼'}${Math.abs(diff).toFixed(1)}</span>`;
-    }
-  }
-
-  document.getElementById('summaryGrid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Total Spend</div>
-      <div class="stat-value accent">£${total.toFixed(2)}</div>
-      <div class="stat-sub">${periodLabel()}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Fuel Cost</div>
-      <div class="stat-value">£${fuelCost.toFixed(2)}</div>
-      <div class="stat-sub">${fuel.length} fill-up${fuel.length!==1?'s':''} · ${litres.toFixed(1)}L</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Service Cost</div>
-      <div class="stat-value">£${maintCost.toFixed(2)}</div>
-      <div class="stat-sub">${maint.length} record${maint.length!==1?'s':''}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Avg MPG</div>
-      <div class="stat-value green">${avg?avg.toFixed(1):'—'}${trendHtml}</div>
-      <div class="stat-sub">${mpgs.length} fill-up${mpgs.length!==1?'s':''} with data</div>
-    </div>
-  `;
-
-  document.getElementById('breakdownTable').innerHTML = `
+  document.getElementById('breakdownTable').innerHTML=`
     <div class="breakdown-row"><span class="lbl">Fuel</span><span class="val">£${fuelCost.toFixed(2)}</span></div>
     <div class="breakdown-row"><span class="lbl">Maintenance</span><span class="val">£${maintCost.toFixed(2)}</span></div>
-    <div class="breakdown-row total"><span class="lbl">Total</span><span class="val">£${total.toFixed(2)}</span></div>
-  `;
+    <div class="breakdown-row total"><span class="lbl">Total</span><span class="val">£${(fuelCost+maintCost).toFixed(2)}</span></div>`;
 
-  // MPG chart — last 10 fill-ups with data, colour-coded vs avg
-  const globalAvg    = avgMpg(null);
-  const mpgEntries   = state.fuel.filter(f=>f.mpg)
-    .slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(-10);
-  const maxMpgChart  = mpgEntries.length ? Math.max(...mpgEntries.map(f=>f.mpg)) : 50;
-
-  document.getElementById('mpgChart').innerHTML = mpgEntries.length
-    ? mpgEntries.map(f => {
-        let cls = 'good';
-        if (globalAvg) {
-          if      (f.mpg < globalAvg * 0.93) cls = 'poor';
-          else if (f.mpg < globalAvg * 0.97) cls = 'avg';
-        }
-        return `
-        <div class="mpg-bar-row">
-          <div class="mpg-bar-label">${shortDate(f.date)}</div>
-          <div class="mpg-bar-track">
-            <div class="mpg-bar-fill ${cls}" style="width:${(f.mpg/maxMpgChart*100).toFixed(1)}%"></div>
-          </div>
-          <div class="mpg-bar-val ${cls}">${f.mpg.toFixed(1)}</div>
-        </div>`;
-      }).join('')
-    : '<div class="empty-msg">Add fill-ups with mileage to see MPG history.</div>';
+  const gAvg=avgMpg();
+  const mpgE=carData.fuel.filter(f=>f.mpg).slice().sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(-10);
+  const maxM=mpgE.length?Math.max(...mpgE.map(f=>f.mpg)):50;
+  document.getElementById('mpgChart').innerHTML=mpgE.length
+    ?mpgE.map(f=>{let cls=gAvg?(f.mpg<gAvg*0.93?'poor':f.mpg<gAvg*0.97?'avg':'good'):'good';
+      return `<div class="mpg-bar-row"><div class="mpg-bar-label">${shortDate(f.date)}</div><div class="mpg-bar-track"><div class="mpg-bar-fill ${cls}" style="width:${(f.mpg/maxM*100).toFixed(1)}%"></div></div><div class="mpg-bar-val ${cls}">${f.mpg.toFixed(1)}</div></div>`;}).join('')
+    :'<div class="empty-msg">Add fill-ups with mileage to see MPG history.</div>';
 }
 
-function prevPeriodFuel() {
-  const now = new Date();
-  return state.fuel.filter(r => {
-    const d = new Date(r.date);
-    if (currentPeriod==='month') {
-      const pm = new Date(now.getFullYear(), now.getMonth()-1, 1);
-      return d.getFullYear()===pm.getFullYear() && d.getMonth()===pm.getMonth();
-    }
+function prevPeriodFuel(){
+  const now=new Date();
+  return carData.fuel.filter(r=>{
+    const d=new Date(r.date);
+    if (currentPeriod==='month'){const pm=new Date(now.getFullYear(),now.getMonth()-1,1);return d.getFullYear()===pm.getFullYear()&&d.getMonth()===pm.getMonth();}
     if (currentPeriod==='year') return d.getFullYear()===now.getFullYear()-1;
     return false;
   });
 }
 
-function periodLabel() {
-  if (currentPeriod==='month') return new Date().toLocaleString('default',{month:'long',year:'numeric'});
-  if (currentPeriod==='year')  return new Date().getFullYear();
-  return 'All time';
+// ── Helpers ────────────────────────────────────────────
+function avgDailyMiles(){
+  const pts=carData.fuel.filter(f=>f.mileage&&f.date).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if (pts.length<2) return 0;
+  const first=pts[0],last=pts[pts.length-1];
+  const days=(new Date(last.date)-new Date(first.date))/86400000;
+  return days>0?(last.mileage-first.mileage)/days:0;
 }
+function fmtDate(s){if(!s)return'—';return new Date(s+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function shortDate(s){if(!s)return'';return new Date(s+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
-function avgDailyMiles() {
-  const pts = state.fuel.filter(f=>f.mileage&&f.date).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
-  if (pts.length < 2) return 0;
-  const first = pts[0], last = pts[pts.length-1];
-  const days  = (new Date(last.date)-new Date(first.date))/86400000;
-  if (days <= 0) return 0;
-  return (last.mileage - first.mileage) / days;
-}
+window.closeModals = () => document.querySelectorAll('.modal-backdrop').forEach(m=>m.classList.remove('open'));
+document.querySelectorAll('.modal-backdrop').forEach(b=>b.addEventListener('click',e=>{if(e.target===b)closeModals();}));
 
-function today() { return new Date().toISOString().slice(0,10); }
-
-function fmtDate(str) {
-  if (!str) return '—';
-  return new Date(str+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-}
-function shortDate(str) {
-  if (!str) return '';
-  return new Date(str+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-}
-
-function closeModals() {
-  document.querySelectorAll('.modal-backdrop').forEach(m=>m.classList.remove('open'));
-}
-document.querySelectorAll('.modal-backdrop').forEach(b=>{
-  b.addEventListener('click', e=>{ if (e.target===b) closeModals(); });
-});
-
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-load();
-renderMileagePill();
-renderFuelList();
-renderMaintList();
-renderServiceBanner();
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/Car-Log/sw.js').catch(()=>{});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/Car-Log/sw.js').catch(()=>{});
 </script>
 </body>
 </html>
